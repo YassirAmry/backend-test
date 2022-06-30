@@ -13,7 +13,7 @@ class ImageRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,9 +24,9 @@ class ImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required',
-            'file'      => 'required',
-            'enable'    => 'required'
+            'name'      => 'required|string',
+            'file'      => 'required|image',
+            'enable'    => 'required|boolean'
         ];
     }
 
@@ -42,7 +42,8 @@ class ImageRequest extends FormRequest
     public function messages()
     {
         return [
-            'required'  => 'Isian :attribute wajib diisi'
+            'required'  => 'Isian :attribute wajib diisi',
+            'boolean'   => 'Isian :attribute tidak sesuai format'
         ];
     }
 }

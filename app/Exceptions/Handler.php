@@ -2,11 +2,18 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use App\Traits\ApiResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -34,8 +41,34 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $e) {
+            return $this->handleException($e);
         });
+    }
+
+    public function handleException(Throwable $e)
+    {
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return $this->sendError('Method for the request is invalid', Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+
+        if ($e instanceof NotFoundHttpException) {
+            return $this->sendError('URL cannot be found', Response::HTTP_NOT_FOUND);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            return $this->sendError("Request not found", Response::HTTP_NOT_FOUND);
+        }
+
+        if ($e instanceof HttpException) {
+            return $this->sendError($e->getMessage(), $e->getStatusCode());
+        }
+
+        if ($e instanceof ValidationException) {
+            $errors = $e->validator->errors()->getMessages();
+            return $this->sendError($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        return $this->sendError('Unexpected Exception', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

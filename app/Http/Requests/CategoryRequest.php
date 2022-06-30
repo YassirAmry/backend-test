@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CategoryRequest extends FormRequest
@@ -13,7 +14,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +25,8 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => 'required',
-            'enable'    => 'required'
+            'name'      => 'required|string',
+            'enable'    => 'required|boolean'
         ];
     }
 
@@ -33,7 +34,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name'      => 'Nama Kategori',
-            'enable'    => 'Status Aktif'
+            'enable'    => 'Status'
         ];
     }
 

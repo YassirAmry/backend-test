@@ -13,7 +13,7 @@ class ProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,9 +24,11 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => 'required',
-            'description'   => 'required',
-            'enable'        => 'required'
+            'name'          => 'required|string',
+            'description'   => 'required|string',
+            'enable'        => 'required|boolean',
+            'categories'    => 'nullable|string',
+            'images'        => 'nullable|string'
         ];
     }
 
@@ -35,14 +37,17 @@ class ProductRequest extends FormRequest
         return [
             'name'          => 'Nama Produk',
             'description'   => 'Keterangan',
-            'enable'        => 'Status Aktif'
+            'enable'        => 'Status Aktif',
+            'categories'    => 'Kategori Produk',
+            'images'        => 'Foto Produk'
         ];
     }
 
     public function messages()
     {
         return [
-            'required'  => 'Isian :attribute wajib diisi'
+            'required'  => 'Isian :attribute wajib diisi',
+            'boolean'   => 'Isian :attribute tidak sesuai format'
         ];
     }
 }
