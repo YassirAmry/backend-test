@@ -34,7 +34,7 @@ class ImageRequest extends FormRequest
     {
         return [
             'name'      => 'Judul File',
-            'file'      => 'Nama File',
+            'file'      => 'File',
             'enable'    => 'Status Aktif'
         ];
     }

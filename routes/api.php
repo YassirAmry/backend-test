@@ -20,4 +20,4 @@ use App\Http\Controllers\Api\CategoryController;
 
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('products', ProductController::class);
-Route::apiResource('images', ImageController::class)->except(['update']);
+Route::apiResource('images', ImageController::class);

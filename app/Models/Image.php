@@ -12,4 +12,24 @@ class Image extends Model
     protected $table = 'images';
 
     protected $fillable = ['name', 'file', 'enable'];
+
+    public function getFileDirectoryAttribute()
+    {
+        return 'images/' . $this->getYearCreatedAtAttribute() . '/' . $this->getMonthCreatedAtAttribute()  . '/';
+    }
+
+    public function getFilePathAttribute()
+    {
+        return $this->getFileDirectoryAttribute() . $this->file;
+    }
+
+    public function getMonthCreatedAtAttribute()
+    {
+        return date('m', strtotime($this->created_at));
+    }
+
+    public function getYearCreatedAtAttribute()
+    {
+        return date('Y', strtotime($this->created_at));
+    }
 }
