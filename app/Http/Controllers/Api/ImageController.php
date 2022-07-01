@@ -25,7 +25,7 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 1;
+        $limit = $request->has('limit') ? $request->limit : 10;
 
         $datas = Image::latest('id')->simplePaginate($limit)->appends($request->all());
 

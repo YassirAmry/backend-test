@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Storage;
 use App\Models\Image;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class ImageUrlController extends Controller
 {
@@ -23,6 +24,6 @@ class ImageUrlController extends Controller
             }
         }
 
-        abort(404);
+        abort(Response::HTTP_NOT_FOUND);
     }
 }
