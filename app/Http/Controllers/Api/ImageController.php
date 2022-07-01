@@ -7,6 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Services\ImageService;
 use App\Http\Requests\ImageRequest;
+use App\Http\Resources\ImageResource;
+use App\Http\Resources\ImageCollection;
 use App\Http\Controllers\Controller;
 
 class ImageController extends Controller
@@ -23,11 +25,11 @@ class ImageController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 10;
+        $limit = $request->has('limit') ? $request->limit : 1;
 
         $datas = Image::latest('id')->simplePaginate($limit)->appends($request->all());
 
-        return $this->sendResponse($datas, 'Show images');
+        return $this->sendResponse(new ImageCollection($datas), 'Show images');
     }
 
     /**
@@ -38,7 +40,7 @@ class ImageController extends Controller
         $store = Image::create($request->only('name', 'enable'));
         $this->imageService->upload($store->id, $request);
 
-        return $this->sendResponse($store, 'Image added successfully');
+        return $this->sendResponse(null, 'Image added successfully');
     }
 
     /**
@@ -48,7 +50,7 @@ class ImageController extends Controller
     {
         $data = Image::find($id);
 
-        return $this->sendResponse($data, 'Detail Image');
+        return $this->sendResponse(new ImageResource($data), 'Detail Image');
     }
 
     /**
@@ -64,7 +66,7 @@ class ImageController extends Controller
             $this->imageService->upload($data->id, $request);
         }
                 
-        return $this->sendResponse($data, 'Image updated successfully');
+        return $this->sendResponse(null, 'Image updated successfully');
     }
 
     /**

@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Models\Category;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\CategoryRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -17,11 +18,9 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 10;
+        $datas = Category::latest('id')->get();
 
-        $datas = Category::latest('id')->simplePaginate($limit)->appends($request->all());
-
-        return $this->sendResponse($datas, 'Show categories');
+        return $this->sendResponse(CategoryResource::collection($datas), 'Show categories');
     }
 
     /**

@@ -13,6 +13,10 @@ class Image extends Model
 
     protected $fillable = ['name', 'file', 'enable'];
 
+    protected $appends = [
+        'imageUrl'
+    ];
+
     public function getFileDirectoryAttribute()
     {
         return 'images/' . $this->getYearCreatedAtAttribute() . '/' . $this->getMonthCreatedAtAttribute()  . '/';
@@ -31,5 +35,10 @@ class Image extends Model
     public function getYearCreatedAtAttribute()
     {
         return date('Y', strtotime($this->created_at));
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return url('api/images/show', $this->id);
     }
 }

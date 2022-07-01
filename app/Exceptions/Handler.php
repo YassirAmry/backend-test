@@ -69,6 +69,6 @@ class Handler extends ExceptionHandler
             return $this->sendError($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        return $this->sendError('Unexpected Exception'.$e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        return $this->sendError('Unexpected Exception', Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

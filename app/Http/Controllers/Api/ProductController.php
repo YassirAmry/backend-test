@@ -7,6 +7,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
 {
@@ -21,7 +23,7 @@ class ProductController extends Controller
 
         $datas = Product::with(['categories', 'images'])->latest('id')->simplePaginate($limit)->appends($request->all());
 
-        return $this->sendResponse($datas, 'Show products');
+        return $this->sendResponse(new ProductCollection($datas), 'Show products');
     }
 
     /**
@@ -39,7 +41,7 @@ class ProductController extends Controller
             $store->images()->attach(explode(',', $request->images));
         }
 
-        return $this->sendResponse($store, 'Product added successfully');
+        return $this->sendResponse(null, 'Product added successfully');
     }
 
     /**
@@ -49,7 +51,7 @@ class ProductController extends Controller
     {
         $data = Product::with(['categories', 'images'])->find($id);
 
-        return $this->sendResponse($data, 'Detail Product');
+        return $this->sendResponse(new ProductResource($data), 'Detail Product');
     }
 
     /**
@@ -68,7 +70,7 @@ class ProductController extends Controller
             $store->images()->sync(explode(',', $request->images));
         }
                 
-        return $this->sendResponse($data, 'Product updated successfully');
+        return $this->sendResponse(null, 'Product updated successfully');
     }
 
     /**

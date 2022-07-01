@@ -23,11 +23,19 @@ class ImageRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name'      => 'required|string',
-            'file'      => 'required|image',
-            'enable'    => 'required|boolean'
-        ];
+        if(request()->isMethod('post')){
+            return [
+                'name'      => 'required|string',
+                'file'      => 'required|image',
+                'enable'    => 'required|boolean'
+            ];
+        }else{
+            return [
+                'name'      => 'required|string',
+                'file'      => 'image',
+                'enable'    => 'required|boolean'
+            ];
+        }
     }
 
     public function attributes()
